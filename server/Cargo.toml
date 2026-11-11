@@ -1,0 +1,40 @@
+[package]
+name = "seesun-wiki"
+version = "0.2.0"
+edition = "2024"
+description = "사내 위키 · 매뉴얼 서버. 문서는 git 저장소에 담고, 로그인한 사람이 고치며, MCP 로도 고칠 수 있다."
+publish = false
+
+[[bin]]
+name = "seesun-wiki"
+path = "src/main.rs"
+
+[features]
+# 임베딩(EmbeddingGemma)은 onnxruntime 을 끌어온다. 그 런타임이 없는 CPU 에 올릴 때는 --no-default-features 로 뺀다.
+default = ["embed"]
+embed = ["dep:fastembed"]
+
+[dependencies]
+axum = "0.8.9"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "process", "fs", "sync", "net", "signal", "time"] }
+# 2026.11.11 : compression-gzip — 화면 JS 가 631KB 그대로 나가서 사내망으로 열면 첫 화면을 받는 데 오래 걸린다.
+tower-http = { version = "0.6", features = ["fs", "compression-gzip"] }
+serde = { version = "1", features = ["derive"] }
+# 머리말 키 순서를 지키려고 preserve_order 를 켠다. 저장할 때 키가 뒤섞이면 diff 가 지저분해진다.
+serde_json = { version = "1", features = ["preserve_order"] }
+tantivy = "0.27.0"
+fastembed = { version = "7.6.1", default-features = false, features = ["onnx", "ort-download-binaries-rustls-tls", "hf-hub-rustls-tls"], optional = true }
+scrypt = { version = "0.11", default-features = false }
+hmac = "0.12"
+sha2 = "0.10"
+subtle = "2"
+base64 = "0.22"
+hex = "0.4"
+getrandom = "0.3"
+regex = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+percent-encoding = "2"
+anyhow = "1"
+
+[profile.release]
+strip = true

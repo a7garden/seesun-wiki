@@ -1,0 +1,21 @@
+{
+  "name": "company-wiki",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "사내 위키 · 매뉴얼 사이트. 서버는 Rust(server/), 화면은 React(web/). 문서는 git 저장소에 담고, 로그인한 사람이 고치며, MCP 로도 고칠 수 있다.",
+  "scripts": {
+    "build": "npm --prefix web run build && cargo build --release --manifest-path server/Cargo.toml",
+    "start": "cargo run --release --quiet --manifest-path server/Cargo.toml",
+    "user": "cargo run --release --quiet --manifest-path server/Cargo.toml -- user",
+    "test": "cargo test --release --quiet --manifest-path server/Cargo.toml && cargo build --release --quiet --manifest-path server/Cargo.toml && node --test test/*.test.js",
+    "seed": "node scripts/seed-manual.mjs",
+    "import:oximemo": "node scripts/import-oximemo.mjs",
+    "wiki": "node scripts/wiki.mjs",
+    "dev:web": "npm --prefix web run dev",
+    "dev:server": "cargo run --manifest-path server/Cargo.toml"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
